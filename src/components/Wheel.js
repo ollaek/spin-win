@@ -8,35 +8,30 @@ class Wheel extends React.Component{
 
     constructor(props) {
         super(props);
-        this.state = { clicksCounter : 0 , c : 0, done : 0, offerId : null, didSubscribe : false};
+        this.state = { clicksCounter : 0 , c : 0, done : 0, offerId : null, didSubscribe : false, configs : {} , offer : {} , subscribe : {}};
         this.mainwheelRef = React.createRef();
         this.wheelRef = React.createRef();
         this.spinRef = React.createRef();
       };
 
-
     componentDidMount(){
         const { msisdn , groupName } = this.props.match.params;
         this.props.getConfigurations(groupName);
         this.props.getSelectedOffer(msisdn, groupName);
-
-       
-
-        console.log(this.state);
-        console.log(this.props);
-        console.log(this.wheelRef);
+        this.setState({ configs : this.props.Configurations.Configurations, offer : this.props.Configurations.selectedOffer });
     };
 
     spinTheWheel = () => {
+        debugger;
         const degree = 3600;
+        if (!this.props.Configurations) return;
         if (this.state.clicksCounter === 1) return;
 
         this.setState({clicksCounter : 1});
         const offerNumber = this.props.Configurations.selectedOffer.OfferNumber;
-        const OfferId = this.props.Configurations.selectedOffer.OfferId;
         const rand = ( 360 / this.props.Configurations.selectedOffer.TotalOffersNumber) * ( this.props.Configurations.selectedOffer.OfferOrder - 1 );
         const giftcss = this.props.Configurations.configurations.BachgroundImagePath;
-        
+        const offerId = this.props.Configurations.selectedOffer.offerId;
         const totalDegree = degree + rand;
         
         this.setState({ done : 0 });
@@ -47,36 +42,32 @@ class Wheel extends React.Component{
             const t = element;
             this.setState({ c : 0 });
             const n = 700;
-            const spin = this.spinRef;
+            const spin = this.spinRef ;
+            console.log("spin :" + spin.current);
             const interval = setInterval(() => {
+              
                 if(this.state.done === 0){
-                    const newC = this.state.c;
-                    this.setState({ c : newC + 1 });
+                    this.setState({ c : this.state.c + 1 });
+                    console.log(this.state.c);
                 }
                 
                 if (this.state.c === n) {
                     clearInterval(interval);
 
                     const mainwheel = this.mainwheelRef;
-                    mainwheel.current.backgroundImage =  giftcss;
-
-                    setTimeout(() => {
+                    const timeout = () => {setTimeout(
+                        () => mainwheel.current.backgroundImage  = giftcss,
+                        500
+                      );
+                    };
+                    
                         if (this.state.done === 0) {
                             this.setState({ done : 1 });
-                            this.subscripeToOffer(offerNumber,OfferId);
-                           
+                            this.subscripeToOffer(offerNumber,offerId);
+                            debugger;
                         }
-                    }, 1000);
-
-
-                }
-                const aoY = t.offsetTop;
-                if (aoY < 23.89) {
-                    spin.current.className = "spin";
-                    setTimeout(() => {
-                        spin.current.className = "spin";
-                    }, 100);
-                }
+                    };
+               
             }, 10);
             
             spin.current.style.transform = `rotate(${totalDegree}deg)`;
@@ -87,24 +78,19 @@ class Wheel extends React.Component{
         
     };
 
-    subscripeToOffer = (offerNumber,OfferId) => {
+    subscripeToOffer = (offerNumber,offerId) => {
+        debugger;
         const { msisdn } = this.props.match.params;
-        this.props.subscribeToOffer(msisdn, offerNumber, OfferId);
+        this.props.subscribeToOffer(msisdn, offerNumber,offerId);
         this.setState({ didSubscribe : true });
-        
+        console.log(this.state);
     };
 
     render(){
         console.log(this.state);
         console.log(this.props);
-        if(this.state.didSubscribe){
-            debugger;
-            if(this.props.configurations.subscripeStatus.ErrorCode === 0){
-                history.push(`/Gift/${this.state.offerId}`);
-            }else{
-                history.push("/ErrorPage");
-            }
-        }
+        
+     
         return(
             <div className="container">
                 
