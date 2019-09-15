@@ -1,14 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import { getConfigurations, getSelectedOffer, subscribeToOffer } from "../Actions";
-import history from "../history";
 
 
 class Wheel extends React.Component{
 
     constructor(props) {
         super(props);
-        this.state = { clicksCounter : 0 , c : 0, done : 0, offerId : null, didSubscribe : false, configs : {} , offer : {} , subscribe : {}};
+        this.state = { clicksCounter : 0 , c : 0, done : 0, offerId : null, didSubscribe : false};
         this.mainwheelRef = React.createRef();
         this.wheelRef = React.createRef();
         this.spinRef = React.createRef();
@@ -18,20 +17,19 @@ class Wheel extends React.Component{
         const { msisdn , groupName } = this.props.match.params;
         this.props.getConfigurations(groupName);
         this.props.getSelectedOffer(msisdn, groupName);
-        this.setState({ configs : this.props.Configurations.Configurations, offer : this.props.Configurations.selectedOffer });
     };
 
     spinTheWheel = () => {
-        debugger;
         const degree = 3600;
-        if (!this.props.Configurations) return;
+        if (!this.props.Configurations.selectedOffer) return;
         if (this.state.clicksCounter === 1) return;
 
         this.setState({clicksCounter : 1});
         const offerNumber = this.props.Configurations.selectedOffer.OfferNumber;
         const rand = ( 360 / this.props.Configurations.selectedOffer.TotalOffersNumber) * ( this.props.Configurations.selectedOffer.OfferOrder - 1 );
         const giftcss = this.props.Configurations.configurations.BachgroundImagePath;
-        const offerId = this.props.Configurations.selectedOffer.offerId;
+        console.log(this.props.Configurations);
+        const offerId = this.props.Configurations.selectedOffer.OfferId;
         const totalDegree = degree + rand;
         
         this.setState({ done : 0 });
