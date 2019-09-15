@@ -28,7 +28,6 @@ class Wheel extends React.Component{
         const offerNumber = this.props.Configurations.selectedOffer.OfferNumber;
         const rand = ( 360 / this.props.Configurations.selectedOffer.TotalOffersNumber) * ( this.props.Configurations.selectedOffer.OfferOrder - 1 );
         const giftcss = this.props.Configurations.configurations.BachgroundImagePath;
-        console.log(this.props.Configurations);
         const offerId = this.props.Configurations.selectedOffer.OfferId;
         const totalDegree = degree + rand;
         
@@ -41,12 +40,10 @@ class Wheel extends React.Component{
             this.setState({ c : 0 });
             const n = 700;
             const spin = this.spinRef ;
-            console.log("spin :" + spin.current);
             const interval = setInterval(() => {
               
                 if(this.state.done === 0){
                     this.setState({ c : this.state.c + 1 });
-                    console.log(this.state.c);
                 }
                 
                 if (this.state.c === n) {
@@ -62,7 +59,6 @@ class Wheel extends React.Component{
                         if (this.state.done === 0) {
                             this.setState({ done : 1 });
                             this.subscripeToOffer(offerNumber,offerId);
-                            debugger;
                         }
                     };
                
@@ -77,18 +73,11 @@ class Wheel extends React.Component{
     };
 
     subscripeToOffer = (offerNumber,offerId) => {
-        debugger;
         const { msisdn } = this.props.match.params;
         this.props.subscribeToOffer(msisdn, offerNumber,offerId);
-        this.setState({ didSubscribe : true });
-        console.log(this.state);
     };
 
     render(){
-        console.log(this.state);
-        console.log(this.props);
-        
-     
         return(
             <div className="container">
                 

@@ -22,7 +22,7 @@ export const getSelectedOffer = (msisdn, groupName ) => async dispatch => {
 
 export const subscribeToOffer = (msisdn, offerNumber, offerId) => async dispatch => {
     const response = await Couponz.get(`api/couponz/subscribetooffer?environment=flex&msisdn=${msisdn}&offernumber=${offerNumber}&rateplan=419&channel=OnLine&forceXmlResult=false`);
-    debugger;
+  
     dispatch({type : SUBSCRIBE_TO_OFFER, payload : response.data});
     if(response.data.ErrorCode === 0){
         history.push(`/Gift/${offerId}`);

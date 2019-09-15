@@ -11,18 +11,13 @@ class Gift extends React.Component {
     }
   
    renderImage(){
-    if(!this.props.Configurations.Offer){
+     if(!this.props.Configurations.Offer){
         return '';
       }
-console.log(this.props.Configurations.Offer.Deals[0].Image);
       return this.props.Configurations.Offer.Deals[0].Image;
    }
 
     render(){
-        console.log(this.props.Configurations.Offer);
-        console.log(this.state);
-        
-        
         return(
             <div className="container">
    

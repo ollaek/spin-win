@@ -7,7 +7,6 @@ class Number extends React.Component{
     state = { msisdn :"" , valid : null, groupName : "test", ErrorMsg : ""}
     componentDidMount(){
         this.props.getConfigurations(this.state.groupName);
-        console.log(this.state);
     };
 
     componentDidUpdate(){
@@ -17,22 +16,17 @@ class Number extends React.Component{
     }
     
     onDigitClick = (digit) => {
-        console.log(this.state.msisdn);
         if(this.state.msisdn.length === 11){
             return;
         }
 
         const msisdn = `${this.state.msisdn}${digit}`;
-        this.setState({ msisdn : msisdn }, () => {
-            console.log(this.props.configuration);
-             });
+        this.setState({ msisdn : msisdn });
     };
 
     onDigitRemove = () => {
         const msisdn = this.state.msisdn;
-        this.setState({msisdn : msisdn.substring(0,msisdn.length -1)}, () => {
-            console.log(this.state.msisdn);
-             });
+        this.setState({msisdn : msisdn.substring(0,msisdn.length -1)});
     }
 
     validateMobileNumber = () => {
@@ -42,7 +36,6 @@ class Number extends React.Component{
         }else{
             this.setState({ valid : false, ErrorMsg : "Wrong mobile number, please enter the right number"});
         }
-        console.log(this.state);
     };
 
     render(){
